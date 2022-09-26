@@ -1,5 +1,6 @@
 import java.util.List;
 import java.util.Scanner;
+import java.lang.Math;
 
 public class App {
     public static void main(String[] args) throws Exception {
@@ -48,9 +49,7 @@ public class App {
         System.out.println("Choose the board size: 4, 6, or 8.");
         int boardsize = gameScanner.nextLine().charAt(0) - '0';
 
-        System.out.println("Initialize new empty board: \n");
-
-        System.out.println("Choose to play as X or O.");
+        System.out.println("\nChoose to play as X or O.");
         System.out.println("If fail to choose, the player will be automatically selected as X.");
         System.out.println("I will play as:");
         char player = gameScanner.nextLine().charAt(0);
@@ -62,12 +61,22 @@ public class App {
 
         System.out.println("Player will play as " + player + " and computer will play as " + opponent + ".\n");
 
-        
+        // Choose the function
+        System.out.println("Choose the opponent mode:\n" 
+            + "    1. An agent that plays randomly \n" 
+            + "    2. An agent that uses MINIMAX \n" 
+            + "    3. An agent that uses MINIMAX with alpha-beta pruning \n"
+            //+ "    4. An agent that uses H-MINIMAX with a fixed depth cutoff and a-b pruning \n"
+            + "If you don't choose, a random agent will be chosen.");
+        int mode = gameScanner.nextLine().charAt(0) - '0';
+        if (mode < 1 || mode > 4) {
+            mode = 1;
+        }
+
         // set up the tree 
+        System.out.println("\nInitialize new empty board: \n");
         Tree newgame = new Tree(boardsize);
         newgame.board.printBoard();
-
-        // newgame.makeTree(player, opponent);
         
         Board gameBoard = newgame.board;
         Node currentNode = newgame.node;
@@ -84,8 +93,9 @@ public class App {
         Boolean playerMove = true;
         // while there are still valid moves
         while (currentNode.getChildrenSize() > 0) {
+            // player's move
             if (playerMove) {
-                System.out.println("There are " + String.valueOf(currentNode.getChildrenSize()) + " possible valid moves.");
+                // System.out.println("There are " + String.valueOf(currentNode.getChildrenSize()) + " possible valid moves.");
                 System.out.println("Type your next move (format 1a, 2b, 3c...):");
                 String move = gameScanner.nextLine();
                 Boolean movefound = false;
@@ -107,14 +117,35 @@ public class App {
                     System.out.println("No valid move found.");
                 }
             } else {
-                System.out.println("The computer will make its next move.");
+            // computer's move
+                // analytic function
                 long start = System.nanoTime();
-                Minimax.makeMinimaxTree(gameBoard, currentNode, player, opponent);
-                for (Node child: currentNode.children) {
-                    child.printNodeInfo();
+                switch (mode) {
+                    case 1: // random agent
+                        System.out.println("The computer is making a random move...");
+                        int ind = (int) (Math.random() * currentNode.getChildrenSize());
+                        currentNode = currentNode.children.get(ind);
+                        break;
+                    case 2: // minimax agent
+                        System.out.println("The computer is thinking of a move...");
+                        Minimax.makeMinimaxTree(gameBoard, currentNode, player, opponent);
+                        currentNode = currentNode.getMaxChild();
+                        break;
+                    case 3: // alpha beta minimax agent
+                        System.out.println("The computer is thinking of a move...");
+                        Minimax.makeMinimaxABTree(gameBoard, currentNode, player, opponent);
+                        currentNode = currentNode.getMaxChild();
+                        break;
+                    case 4: // alpha beta h-minimax agent
+                        System.out.println("The computer is thinking of a move...");
+
+                        break;
+                    default: // default to random 
+                        ind = (int) (Math.random() * currentNode.getChildrenSize());
+                        currentNode = currentNode.children.get(ind);
                 }
-                currentNode = currentNode.getMaxChild();
-                currentNode.printNodeInfo();
+                
+                // done analysis
                 long finish = System.nanoTime();
                 long timeElapsed = (finish - start)/1000000;
                 System.out.println("Time elapsed (in miliseconds): " + timeElapsed);
@@ -129,19 +160,13 @@ public class App {
 
         // when there are no move, settle the result
         // get utility 
-        if (playerMove) {
-            System.out.println("Player has no valid move. Game ends.");
-            Minimax.makeMinTree(gameBoard, currentNode, player, opponent); 
-        } else {
-            System.out.println("Computer has no valid move. Game ends.");
-            Minimax.makeMaxTree(gameBoard, currentNode, player, opponent);
-        }
+        currentNode.setUtility(gameBoard.getUtilityWin(player, opponent));
 
         // anounce winner
         int win = currentNode.getUtility();
-        if (win == 1) {
+        if (win > 0) {
             System.out.println("The computer has won!");
-        } else if (win == -1) {
+        } else if (win < 0) {
             System.out.println("The player has won!");
         } else {
             System.out.println("The game ends in a draw.");
