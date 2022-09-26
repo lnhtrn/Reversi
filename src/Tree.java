@@ -1,25 +1,22 @@
 public class Tree {
-    Board board; // parent, original node of tree
+    Board board; 
+    Node node; // parent, original node of tree
 
     // initialize game tree 
     public Tree(int size) {
         this.board = new Board(size);
+        this.node = new Node();
     }
 
-    // make tree 
-    public void makeTree(char player, char opponent, Boolean max_layer) {
-        if (max_layer) {
-            // if computer plays first, root node is the max layer
-            Minimax.makeMinimaxTree(this.board, opponent, player, true);
-        } else {
-            // meaning the computer (root node) is not the max layer
-            Minimax.makeMinimaxTree(this.board, opponent, player, false);
-        }
-
+    // recursion function to generate game tree 
+    public void makeTree(char player, char opponent) {
+        int root_utility = Minimax.makeMinTree(this.board, this.node, player, opponent);
+        this.node.setUtility(root_utility);
     }
 
-    // calculate tree utility 
-    public void calculateUtilityTree() {
-        Minimax.calculateUtility(this.board, true);
+    // recursion function to generate game tree with alpha-beta pruning 
+    public void makeABTree(char player, char opponent) {
+        int root_utility = Minimax.makeMaxABTree(this.board, this.node, player, opponent);
+        this.node.setUtility(root_utility);
     }
 }

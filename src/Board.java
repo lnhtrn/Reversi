@@ -1,10 +1,12 @@
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 // interface for all node/state spaces/boards in the minimax tree
 interface Boards {
+    // copy board 
+    // public Board copyBoard(Board org_board);
+
     // get move from location
-    char getMove(int x, int y);
+    public char getMove(int x, int y);
 
     // flip the move at one location 
     public void flipMove(int x, int y);
@@ -12,36 +14,19 @@ interface Boards {
     // put a move on the board
     public void setMove(int x, int y, char player);
 
-    // get the utility value of the board/state
-    public int getUtility();
-
     // get the win/lose value of the board
-    public void settleWin(char player);
+    public char countWin();
 
     // print the board 
     public void printBoard();
 
-    // get the highest value child 
-    public Board getMaxChild();
-
-    // get the lowest value child
-    public Board getMinChild();
-
-    // get the parent state/board
-    public Board getParent();
-
-    // get the number of children states
-    public int getChildrenSize();
+    // get the board size 
+    public int getBoardSize();
 }
 
 public class Board implements Boards {
     char[][] board;
-    int size;
-    Integer utility = null;
-
-    Board parent;
-    String parentMove; // to signify which move it comes from 
-    List<Board> children = null;
+    private int size;
 
     // initialize board
     public Board(int size) {
@@ -63,6 +48,14 @@ public class Board implements Boards {
         Board newboard = new Board(org_board.size);
         for (int i = 0; i < org_board.size; i++) {
             newboard.board[i] = Arrays.copyOf(org_board.board[i], org_board.size);
+        }
+        return newboard;
+    }
+
+    public char[][] copyBoardChar() {
+        char[][] newboard = new char[this.size][this.size];
+        for (int i = 0; i < this.size; i++) {
+            newboard[i] = Arrays.copyOf(this.board[i], this.size);
         }
         return newboard;
     }
@@ -90,44 +83,22 @@ public class Board implements Boards {
         }
     }
 
-    public int getUtility() {
-        return this.utility;
-    }
-
-    public void settleWin(char player) {
-        int x_count = 0;
-        int o_count = 0;
+    public int getUtilityWin(char player, char opponent) {
+        int player_count = 0;
+        int opponent_count = 0;
 
         // count the player's total moves on board
         for (char[] row : this.board) {
             for (char square : row) {
-                if (square == 'X') {
-                    x_count++;
-                } else if (square == 'O') {
-                    o_count++;
+                if (square == player) {
+                    player_count++;
+                } else if (square == opponent) {
+                    opponent_count++;
                 }
             }
         }
 
-        int playerMoves;
-        int opponentMoves;
-
-        if (player == 'X') {
-            playerMoves = x_count;
-            opponentMoves = o_count;
-        } else {
-            playerMoves = o_count;
-            opponentMoves = x_count;
-        }
-        
-        // settle the result 
-        if (playerMoves > opponentMoves) {
-            this.utility = 1;
-        } else if (playerMoves == opponentMoves) {
-            this.utility = 0;
-        } else {
-            this.utility = -1;
-        }
+        return opponent_count-player_count;
     }
 
     public char countWin() {
@@ -173,50 +144,7 @@ public class Board implements Boards {
         System.out.println();
     }
 
-    public void printBoardInfo() {
-        /*char[][] board;
-        int size;
-        Integer utility = null;
-
-        Board parent;
-        String parentMove; // to signify which move it comes from 
-        List<Board> children = null; */
-        printBoard();
-        System.out.println("The utility of this board state is " + utility.toString());
-    }
-
-    // tree-like functions 
-    // get the highest value child 
-    public Board getMaxChild()  {
-        int max = -1000;
-        int ind = 0;
-        for (Board child : this.children) {
-            if (child.utility > max) {
-                ind = this.children.indexOf(child);
-            }
-        }
-        return this.children.get(ind);
-    }
-
-    // get the lowest value child
-    public Board getMinChild() {
-        int max = 1000;
-        int ind = 0;
-        for (Board child : this.children) {
-            if (child.utility < max) {
-                ind = this.children.indexOf(child);
-            }
-        }
-        return this.children.get(ind);
-    }
-
-    // get the parent state/board
-    public Board getParent() {
-        return this.parent;
-    }
-
-    // get the number of children states
-    public int getChildrenSize() {
-        return this.children.size();
+    public int getBoardSize() {
+        return this.size;
     }
 }
