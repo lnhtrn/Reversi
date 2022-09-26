@@ -95,22 +95,31 @@ public class Board implements Boards {
     }
 
     public void settleWin(char player) {
-        int playerMoves = 0;
-        int opponentMoves = 0;
-        char opponent = 'X';
-        if (player == 'X') {
-            opponent = 'O';
-        }
+        int x_count = 0;
+        int o_count = 0;
+
         // count the player's total moves on board
         for (char[] row : this.board) {
             for (char square : row) {
-                if (square == player) {
-                    playerMoves++;
-                } else if (square == opponent) {
-                    opponentMoves++;
+                if (square == 'X') {
+                    x_count++;
+                } else if (square == 'O') {
+                    o_count++;
                 }
             }
         }
+
+        int playerMoves;
+        int opponentMoves;
+
+        if (player == 'X') {
+            playerMoves = x_count;
+            opponentMoves = o_count;
+        } else {
+            playerMoves = o_count;
+            opponentMoves = x_count;
+        }
+        
         // settle the result 
         if (playerMoves > opponentMoves) {
             this.utility = 1;
@@ -118,6 +127,30 @@ public class Board implements Boards {
             this.utility = 0;
         } else {
             this.utility = -1;
+        }
+    }
+
+    public char countWin() {
+        int x_count = 0;
+        int o_count = 0;
+
+        // count the player's total moves on board
+        for (char[] row : this.board) {
+            for (char square : row) {
+                if (square == 'X') {
+                    x_count++;
+                } else if (square == 'O') {
+                    o_count++;
+                }
+            }
+        }
+
+        if (x_count > o_count) {
+            return 'X';
+        } else if (x_count < o_count) {
+            return 'O';
+        } else {
+            return '_';
         }
     }
 
@@ -138,6 +171,18 @@ public class Board implements Boards {
             i++;
         }
         System.out.println();
+    }
+
+    public void printBoardInfo() {
+        /*char[][] board;
+        int size;
+        Integer utility = null;
+
+        Board parent;
+        String parentMove; // to signify which move it comes from 
+        List<Board> children = null; */
+        printBoard();
+        System.out.println("The utility of this board state is " + utility.toString());
     }
 
     // tree-like functions 

@@ -23,6 +23,14 @@ public class Reversi {
     // function to check if move is valid
     // input: board object, location of next move (x,y), player (O or X)
     // output: List (moveValid, board), moveValid = true if move exists
+    /**
+     * @param board
+     * @param x
+     * @param y
+     * @param player
+     * @return
+     */
+
     public static List<Object> moveCheck(Board board, int x, int y, char player) {
         boolean moveValid = false;
         Board new_Board = Board.copyBoard(board); 
@@ -41,53 +49,21 @@ public class Reversi {
         List<Integer> flipmoves = new ArrayList<Integer>();
         while (y_new-1 >= 0) {
             y_new = y_new-1;
+            if (new_Board.getMove(x, y_new) == '_') {
+                break;
+            }
             if (new_Board.getMove(x, y_new) == opponent) {
                 flipmoves.add(y_new);
             }
-            if (new_Board.getMove(x, y_new) == player && flipmoves.size() > 0) {
-                moveValid = true;
-                // flip all opponent's moves 
-                for (Integer move : flipmoves) {
-                    new_Board.flipMove(x, move);
+            if (new_Board.getMove(x, y_new) == player) {
+                if (flipmoves.size() > 0) {
+                    moveValid = true;
+                    // flip all opponent's moves 
+                    for (Integer move : flipmoves) {
+                        new_Board.flipMove(x, move);
+                    }
                 }
-            }
-        }
-
-        // check diagonal up left 
-        y_new = y;
-        x_new = x;
-        List<Integer[]> dia_flipmoves = new ArrayList<Integer[]>();
-        while (y_new-1 >= 0 && x_new+1 < new_Board.size) {
-            y_new = y_new-1;
-            x_new = x_new+1;
-            if (new_Board.getMove(x_new, y_new) == opponent) {
-                dia_flipmoves.add(new Integer[] {x_new, y_new});
-            }
-            if (new_Board.getMove(x_new, y_new) == player && dia_flipmoves.size() > 0) {
-                moveValid = true;
-                // flip all opponent's moves 
-                for (Integer[] moves : dia_flipmoves) {
-                    new_Board.flipMove(moves[0], moves[1]);
-                }
-            }
-        }
-
-        // check diagonal down left 
-        y_new = y;
-        x_new = x;
-        dia_flipmoves = new ArrayList<Integer[]>();
-        while (y_new-1 >= 0 && x_new-1 >= 0) {
-            y_new = y_new-1;
-            x_new = x_new-1;
-            if (new_Board.getMove(x_new, y_new) == opponent) {
-                dia_flipmoves.add(new Integer[] {x_new, y_new});
-            }
-            if (new_Board.getMove(x_new, y_new) == player && dia_flipmoves.size() > 0) {
-                moveValid = true;
-                // flip all opponent's moves 
-                for (Integer[] moves : dia_flipmoves) {
-                    new_Board.flipMove(moves[0], moves[1]);
-                }
+                break;
             }
         }
 
@@ -96,15 +72,21 @@ public class Reversi {
         flipmoves = new ArrayList<Integer>();
         while (y_new+1 < new_Board.size) {
             y_new = y_new+1;
+            if (new_Board.getMove(x, y_new) == '_') {
+                break;
+            }
             if (new_Board.getMove(x, y_new) == opponent) {
                 flipmoves.add(y_new);
             }
-            if (new_Board.getMove(x, y_new) == player && flipmoves.size() > 0) {
-                moveValid = true;
-                // flip all opponent's moves 
-                for (Integer move : flipmoves) {
-                    new_Board.flipMove(x, move);
+            if (new_Board.getMove(x, y_new) == player) {
+                if (flipmoves.size() > 0) {
+                    moveValid = true;
+                    // flip all opponent's moves 
+                    for (Integer move : flipmoves) {
+                        new_Board.flipMove(x, move);
+                    }
                 }
+                break;
             }
         }
 
@@ -113,15 +95,21 @@ public class Reversi {
         flipmoves = new ArrayList<Integer>();
         while (x_new+1 < new_Board.size) {
             x_new = x_new+1;
+            if (new_Board.getMove(x_new, y) == '_') {
+                break;
+            }
             if (new_Board.getMove(x_new, y) == opponent) {
                 flipmoves.add(x_new);
             }
-            if (new_Board.getMove(x_new, y) == player && flipmoves.size() > 0) {
-                moveValid = true;
-                // flip all opponent's moves 
-                for (Integer move : flipmoves) {
-                    new_Board.flipMove(move, y);
+            if (new_Board.getMove(x_new, y) == player) {
+                if (flipmoves.size() > 0) {
+                    moveValid = true;
+                    // flip all opponent's moves 
+                    for (Integer move : flipmoves) {
+                        new_Board.flipMove(move, y);
+                    }
                 }
+                break;
             }
         }
 
@@ -130,34 +118,71 @@ public class Reversi {
         flipmoves = new ArrayList<Integer>();
         while (x_new-1 >= 0) {
             x_new = x_new-1;
+            if (new_Board.getMove(x_new, y) == '_') {
+                break;
+            }
             if (new_Board.getMove(x_new, y) == opponent) {
                 flipmoves.add(x_new);
             }
-            if (new_Board.getMove(x_new, y) == player && flipmoves.size() > 0) {
-                moveValid = true;
-                // flip all opponent's moves 
-                for (Integer move : flipmoves) {
-                    new_Board.flipMove(move, y);
+            if (new_Board.getMove(x_new, y) == player) {
+                if (flipmoves.size() > 0) {
+                    moveValid = true;
+                    // flip all opponent's moves 
+                    for (Integer move : flipmoves) {
+                        new_Board.flipMove(move, y);
+                    }
                 }
+                break;
             }
         }
 
-        // check diagonal up right
+        // check diagonal down left 
         y_new = y;
         x_new = x;
-        dia_flipmoves = new ArrayList<Integer[]>();
-        while (y_new+1 < new_Board.size && x_new+1 < new_Board.size) {
-            y_new = y_new+1;
+        List<Integer[]> dia_flipmoves = new ArrayList<Integer[]>();
+        while (y_new-1 >= 0 && x_new+1 < new_Board.size) {
+            y_new = y_new-1;
             x_new = x_new+1;
+            if (new_Board.getMove(x_new, y_new) == '_') {
+                break;
+            }
             if (new_Board.getMove(x_new, y_new) == opponent) {
                 dia_flipmoves.add(new Integer[] {x_new, y_new});
             }
-            if (new_Board.getMove(x_new, y_new) == player && dia_flipmoves.size() > 0) {
-                moveValid = true;
-                // flip all opponent's moves 
-                for (Integer[] moves : dia_flipmoves) {
-                    new_Board.flipMove(moves[0], moves[1]);
+            if (new_Board.getMove(x_new, y_new) == player) {
+                if (dia_flipmoves.size() > 0) {
+                    moveValid = true;
+                    // flip all opponent's moves 
+                    for (Integer[] moves : dia_flipmoves) {
+                        new_Board.flipMove(moves[0], moves[1]);
+                    }
                 }
+                break;
+            }
+        }
+
+        // check diagonal up left 
+        y_new = y;
+        x_new = x;
+        dia_flipmoves = new ArrayList<Integer[]>();
+        while (y_new-1 >= 0 && x_new-1 >= 0) {
+            y_new = y_new-1;
+            x_new = x_new-1;
+            if (new_Board.getMove(x_new, y_new) == '_') {
+                break;
+            }
+            if (new_Board.getMove(x_new, y_new) == opponent) {
+                dia_flipmoves.add(new Integer[] {x_new, y_new});
+            }
+            if (new_Board.getMove(x_new, y_new) == player) {
+                if (dia_flipmoves.size() > 0) {
+                    moveValid = true;
+                    // flip all opponent's moves 
+                    for (Integer[] moves : dia_flipmoves) {
+                        new_Board.flipMove(moves[0], moves[1]);
+                    }
+                }
+                break;
             }
         }
 
@@ -165,18 +190,49 @@ public class Reversi {
         y_new = y;
         x_new = x;
         dia_flipmoves = new ArrayList<Integer[]>();
-        while (y_new+1 < new_Board.size && x_new-1 >= 0) {
+        while (y_new+1 < new_Board.size && x_new+1 < new_Board.size) {
             y_new = y_new+1;
-            x_new = x_new-1;
+            x_new = x_new+1;
+            if (new_Board.getMove(x_new, y_new) == '_') {
+                break;
+            }
             if (new_Board.getMove(x_new, y_new) == opponent) {
                 dia_flipmoves.add(new Integer[] {x_new, y_new});
             }
-            if (new_Board.getMove(x_new, y_new) == player && dia_flipmoves.size() > 0) {
-                moveValid = true;
-                // flip all opponent's moves 
-                for (Integer[] moves : dia_flipmoves) {
-                    new_Board.flipMove(moves[0], moves[1]);
+            if (new_Board.getMove(x_new, y_new) == player) {
+                if (dia_flipmoves.size() > 0) {
+                    moveValid = true;
+                    // flip all opponent's moves 
+                    for (Integer[] moves : dia_flipmoves) {
+                        new_Board.flipMove(moves[0], moves[1]);
+                    }
                 }
+                break;
+            }
+        }
+
+        // check diagonal up right
+        y_new = y;
+        x_new = x;
+        dia_flipmoves = new ArrayList<Integer[]>();
+        while (y_new+1 < new_Board.size && x_new-1 >= 0) {
+            y_new = y_new+1;
+            x_new = x_new-1;
+            if (new_Board.getMove(x_new, y_new) == '_') {
+                break;
+            }
+            if (new_Board.getMove(x_new, y_new) == opponent) {
+                dia_flipmoves.add(new Integer[] {x_new, y_new});
+            }
+            if (new_Board.getMove(x_new, y_new) == player) {
+                if (dia_flipmoves.size() > 0) {
+                    moveValid = true;
+                    // flip all opponent's moves 
+                    for (Integer[] moves : dia_flipmoves) {
+                        new_Board.flipMove(moves[0], moves[1]);
+                    }
+                }
+                break;
             }
         }
 
