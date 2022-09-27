@@ -2,7 +2,7 @@ import java.util.List;
 import java.util.Scanner;
 import java.lang.Math;
 
-public class App {
+public class Game {
     public static void main(String[] args) throws Exception {
 
         /*
@@ -66,7 +66,7 @@ public class App {
             + "    1. An agent that plays randomly \n" 
             + "    2. An agent that uses MINIMAX \n" 
             + "    3. An agent that uses MINIMAX with alpha-beta pruning \n"
-            //+ "    4. An agent that uses H-MINIMAX with a fixed depth cutoff and a-b pruning \n"
+            + "    4. An agent that uses H-MINIMAX with a fixed depth cutoff and a-b pruning \n"
             + "If you don't choose, a random agent will be chosen.");
         int mode = gameScanner.nextLine().charAt(0) - '0';
         if (mode < 1 || mode > 4) {
@@ -138,7 +138,8 @@ public class App {
                         break;
                     case 4: // alpha beta h-minimax agent
                         System.out.println("The computer is thinking of a move...");
-
+                        Minimax.makeHMinimaxTree(gameBoard, currentNode, player, opponent);
+                        currentNode = currentNode.getMaxChild();
                         break;
                     default: // default to random 
                         ind = (int) (Math.random() * currentNode.getChildrenSize());

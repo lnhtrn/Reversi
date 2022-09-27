@@ -21,13 +21,8 @@ public class Reversi {
     // function to check if move is valid
     // input: board object, location of next move (x,y), player (O or X)
     // output: List (moveValid, board), moveValid = true if move exists
-    /**
-     * @param board
-     * @param x
-     * @param y
-     * @param player
-     * @return
-     */
+
+    // this function defines the transition from state to state
 
     public static Integer[] moveCheck(Board board, int x, int y, char player) {
         boolean moveValid = false;
@@ -225,6 +220,9 @@ public class Reversi {
 
     // function to generate new children states (valid moves after one state)
     // input: board object 
+
+    // this function creates the transition (child nodes) from state to state 
+
     public static List<Node> getChildrenStates(Board board, Node node, char player) {
         List<Node> children = new ArrayList<>();
 
@@ -245,6 +243,8 @@ public class Reversi {
         return children;
     } 
 
+    // function to execute a move 
+    
     public static Board makeMove(Board board, int x, int y, char player) {
         Board new_Board = Board.copyBoard(board); 
         int x_new = 0;

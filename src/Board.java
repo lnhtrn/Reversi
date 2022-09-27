@@ -101,6 +101,67 @@ public class Board implements Boards {
         return opponent_count-player_count;
     }
 
+    public int getHeuristicUtility(char player, char opponent) {
+        // calculate using the difference between the total value of 
+        // the computer's moves and the player's moves
+        int utility = 0;
+
+        char[][] scoreBoard = new char[][] {
+            "6226".toCharArray(), 
+            "2112".toCharArray(),
+            "2112".toCharArray(),
+            "6226".toCharArray(),
+        };
+
+        switch (this.size) {
+            case 4:
+                scoreBoard = new char[][] {
+                    "4224".toCharArray(), 
+                    "2112".toCharArray(),
+                    "2112".toCharArray(),
+                    "4224".toCharArray(),
+                };
+                break;
+            case 6:
+                scoreBoard = new char[][] {
+                    "615516".toCharArray(), 
+                    "102201".toCharArray(),
+                    "524425".toCharArray(),
+                    "524425".toCharArray(), 
+                    "102201".toCharArray(),
+                    "615516".toCharArray(),
+                };
+                break;
+            case 8: 
+                scoreBoard = new char[][] {
+                    "81666618".toCharArray(), 
+                    "10222201".toCharArray(),
+                    "62544526".toCharArray(),
+                    "62455426".toCharArray(),
+                    "62455426".toCharArray(),
+                    "62544526".toCharArray(), 
+                    "10222201".toCharArray(),
+                    "81666618".toCharArray(),
+                };
+                break;
+            default:
+                // nothing
+        }
+
+        // count the computer's moves - the player's moves on board
+        for (int i = 0; i < this.size; i++) {
+            for (int j = 0; j < this.size; j++) {
+                if (this.board[i][j] == player) {
+                    utility += (scoreBoard[i][j] - '0' - this.size/2);
+                } else if (this.board[i][j] == opponent) {
+                    utility -= (scoreBoard[i][j] - '0' - this.size/2);
+                }
+            }
+        }
+
+        return utility;
+    }
+
     public char countWin() {
         int x_count = 0;
         int o_count = 0;

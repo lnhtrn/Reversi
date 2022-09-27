@@ -2,8 +2,6 @@ import java.util.*;
 
 public class Minimax {
 
-    // recursive function to make tree 
-
     // recursion function to generate game tree 
     public static void makeMinimaxTree(Board org_board, Node root_node, char player, char opponent) {
         int root_utility = Minimax.makeMaxTree(org_board, root_node, player, opponent);
@@ -18,7 +16,7 @@ public class Minimax {
 
     // recursion function to generate game tree with Alpha Beta pruning and Heuristic function 
     public static void makeHMinimaxTree(Board org_board, Node root_node, char player, char opponent) {
-        int root_utility = Minimax.makeHMaxTree(org_board, root_node, -10000, 10000, player, opponent);
+        int root_utility = Minimax.makeHMaxTree(org_board, root_node, -10000, 10000, 4, player, opponent);
         root_node.setUtility(root_utility);
     }
 
@@ -179,7 +177,7 @@ public class Minimax {
         return utility;
     }
 
-    public static int makeHMaxTree(Board org_board, Node node, int alpha, int beta, char player, char opponent) {
+    public static int makeHMaxTree(Board org_board, Node node, int alpha, int beta, int depth, char player, char opponent) {
         int utility = -10000;
 
         // System.out.println("Make Max Tree");
@@ -189,9 +187,18 @@ public class Minimax {
 
         // if this is the terminal node
         if (children.size() == 0) {
-            utility = org_board.getUtilityWin(player, opponent);
+            utility = org_board.getUtilityWin(player, opponent)*4;
             node.setUtility(utility);
-            // System.out.println("Utility " + utility + " at this board state:");
+            System.out.println("Utility " + utility + " at this board state:");
+            // org_board.printBoard();
+            return utility;
+        }
+
+        // if this is the last depth layer
+        if (depth == 0) {
+            utility = org_board.getHeuristicUtility(player, opponent) + children.size()*2;
+            node.setUtility(utility);
+            System.out.println("Utility " + utility + " at this board state:");
             // org_board.printBoard();
             return utility;
         }
@@ -200,7 +207,7 @@ public class Minimax {
         node.children = children;
         for (Node child: children) {
             Board newBoard = Reversi.makeMove(org_board, child.parentMove[0], child.parentMove[1], opponent);
-            int new_utility = makeMinABTree(newBoard, child, alpha, beta, player, opponent);
+            int new_utility = makeHMinTree(newBoard, child, alpha, beta, depth-1, player, opponent);
             if (new_utility > utility) {
                 utility = new_utility;
             }
@@ -216,7 +223,7 @@ public class Minimax {
         return utility;
     }
 
-    public static int makeHMinTree(Board org_board, Node node, int alpha, int beta, char player, char opponent) {
+    public static int makeHMinTree(Board org_board, Node node, int alpha, int beta, int depth, char player, char opponent) {
         int utility = 10000;
 
         // System.out.println("Make Min Tree");
@@ -227,9 +234,18 @@ public class Minimax {
         // if this is the terminal node 
         if (children.size() == 0) {
             // if this is the end node then settle the result
-            utility = org_board.getUtilityWin(player, opponent);
+            utility = org_board.getUtilityWin(player, opponent)*4;
             node.setUtility(utility);
-            // System.out.println("Utility " + utility + " at this board state:");
+            System.out.println("Utility " + utility + " at this board state:");
+            // org_board.printBoard();
+            return utility;
+        }
+
+        // if this is the last depth layer
+        if (depth == 0) {
+            utility = org_board.getHeuristicUtility(player, opponent) + children.size()*2;
+            node.setUtility(utility);
+            System.out.println("Utility " + utility + " at this board state:");
             // org_board.printBoard();
             return utility;
         }
@@ -238,7 +254,7 @@ public class Minimax {
         node.children = children;
         for (Node child: children) {
             Board newBoard = Reversi.makeMove(org_board, child.parentMove[0], child.parentMove[1], player);
-            int new_utility = makeMaxABTree(newBoard, child, alpha, beta, player, opponent);
+            int new_utility = makeHMaxTree(newBoard, child, alpha, beta, depth-1, player, opponent);
             if (new_utility < utility) {
                 utility = new_utility;
             }
