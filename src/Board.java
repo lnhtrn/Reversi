@@ -22,6 +22,12 @@ interface Boards {
 
     // get the board size 
     public int getBoardSize();
+
+    // function to get the basic utility of a board state
+    public int getUtilityWin(char player, char opponent);
+
+    // function to get the heuristic utility of a board state 
+    public int getHeuristicUtility(char player, char opponent);
 }
 
 public class Board implements Boards {

@@ -16,6 +16,8 @@ LIMITATIONS:
     agent, the game will run out of memory for Reversi/Othello size 6x6 and 8x8.
     That means any game with size 6x6 or 8x8 must run a random agent or a 
     H_Minimax agent.
+2.  My heuristic function ends up being kind of terrible so the H_Minimax 
+    games does not play that well, (sometimes worse than random agent.)
 
 OTHER INFORMATION
 1.  For the Minimax agent (2) and the Alpha-Beta pruning Minimax agent (3), 
@@ -26,7 +28,8 @@ REFERENCE:
 1.  I read http://home.datacomm.ch/t_wolf/tw/misc/reversi/html/index.html 
     to get an idea of how to implement the heuristic function. I did not 
     end up using the exact heuristic function described in the blog post 
-    but I thought I should give credits anyways for Academic Honesty. 
+    but I thought I should give credits anyways for Academic Honesty. My 
+    heuristic function ends up being also kind of terrible. 
 2.  The structure of the code used in this project is heavily inspired by 
     the pseudocode in the textbook. 
 
