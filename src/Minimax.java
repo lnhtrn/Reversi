@@ -189,7 +189,7 @@ public class Minimax {
         if (children.size() == 0) {
             utility = org_board.getUtilityWin(player, opponent)*4;
             node.setUtility(utility);
-            System.out.println("Utility " + utility + " at this board state:");
+            // System.out.println("Utility " + utility + " at this board state:");
             // org_board.printBoard();
             return utility;
         }
@@ -198,7 +198,7 @@ public class Minimax {
         if (depth == 0) {
             utility = org_board.getHeuristicUtility(player, opponent) + children.size()*2;
             node.setUtility(utility);
-            System.out.println("Utility " + utility + " at this board state:");
+            // System.out.println("Utility " + utility + " at this board state:");
             // org_board.printBoard();
             return utility;
         }
@@ -236,7 +236,7 @@ public class Minimax {
             // if this is the end node then settle the result
             utility = org_board.getUtilityWin(player, opponent)*4;
             node.setUtility(utility);
-            System.out.println("Utility " + utility + " at this board state:");
+            // System.out.println("Utility " + utility + " at this board state:");
             // org_board.printBoard();
             return utility;
         }
@@ -245,7 +245,7 @@ public class Minimax {
         if (depth == 0) {
             utility = org_board.getHeuristicUtility(player, opponent) + children.size()*2;
             node.setUtility(utility);
-            System.out.println("Utility " + utility + " at this board state:");
+            // System.out.println("Utility " + utility + " at this board state:");
             // org_board.printBoard();
             return utility;
         }
