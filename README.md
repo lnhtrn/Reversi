@@ -2,6 +2,8 @@
 
 Reversi is a strategy board game for two players, played on an 8×8 uncheckered board. It was invented in 1883. Othello, a variant with a fixed initial setup of the board, was patented in 1971.[^1]
 
+This game is a Java implementation of Reversi/Othello. The computer or opponent's logic is determined by 1. randomization, 2. Minimax algorithm or 3. Heuristic Minimax algorithm.
+
 ### How to play 
 
 The gameplay is explained in the [Rules](https://en.wikipedia.org/wiki/Reversi#Rules) section of the Wikipedia page. The starting position of the game looks like this:
